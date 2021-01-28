@@ -46,7 +46,7 @@ class MyLogo extends HTMLElement {
                 <option value="url('components/img/CoteObscur.png')">Le côté obscur</option>
                 <option value="url('components/img/RetroWave.webp')">Retro Wave</option>
             </select>
-            <input type="file" id="importImage" accept=".jpg, .jpeg, .png, .gif" value="./components/imported/">
+            <input type="file" id="importImage" accept=".jpg, .jpeg, .png, .gif" value="./components/import/">bouton import image : non fonctionnel
             <div id="imageSizeOption" display=""><br><br><br>
                 Taille<input type="range" min="1" max="300" value="50" id="imageSizeSelector">
             </div><br><br>

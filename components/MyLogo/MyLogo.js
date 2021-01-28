@@ -4,8 +4,9 @@ class MyLogo extends HTMLElement {
         <link href="https://fonts.googleapis.com/css?family=Rancho&effect=fire-animation|anaglyph|emboss|mitosis|neon|outline|shadow-multiple|3d|3d-float" rel="stylesheet">
 
         <!-- OPTIONS DU MENU -->
-        <input type="button" id="showMenu" value="Afficher le menu">
-        Opacité:<input type="range" min="0.2" max="1" value="1" step="0.01" id="opacityMenuSelector">
+        <input type="button" id="showMenu" value="Affichage menu">
+        <input type="button" id="printLogo" value="Imprimer le logo">
+        Opacité du menu<input type="range" min="0.2" max="1" value="1" step="0.01" id="opacityMenuSelector">
 
         <div id="menu">
             <br>
@@ -46,24 +47,27 @@ class MyLogo extends HTMLElement {
                 <option value="url('components/img/RetroWave.webp')">Retro Wave</option>
             </select>
             <input type="file" id="importImage" accept=".jpg, .jpeg, .png, .gif" value="./components/imported/">
-            <div id="imageSizeOption">
+            <div id="imageSizeOption" display=""><br><br><br>
                 Taille<input type="range" min="1" max="300" value="50" id="imageSizeSelector">
-            </div>
+            </div><br><br>
             <br>
 
             <!-- AUDIO -->
-            <audio id="audio-test"><source src="components/audio/test.wav" type="audio/wav"></audio>
+            <audio id="audio-test"><source src="components/audio/Micheal Jackson - Billie jean.mp3" type="audio/mp3"></audio>
             <audio id="audio-secondPoteauPavard"><source src="components/audio/secondPoteauPavard.mp3" type="audio/mp3"></audio>
             <audio id="audio-acdc"><source src="components/audio/acdc.mp3" type="audio/mp3"></audio>
+
+            <!-- Erreur rencontrée lors de l'import de musique : non fonctionnel -> erreur liée au 'currentSource' -->
             <audio id="audio-imported"><source id="selectedSound" src="" type="audio/mp3"></audio>
+            
             <select id="soundSelector">
                 <option id="soundToImport" value="audio-imported">Selectionner une musique ou un son</option>
-                <option value="audio-test">PUTAIN OUAIS !</option>
+                <option value="audio-test">M. Jackson - Billie Jean</option>
                 <option value="audio-secondPoteauPavard">Second poteau PAVARD...</option>
                 <option value="audio-acdc">Thunderstruck</option>
             </select>
-            <input type="file" id="importSound" accept=".wav, .mp3" value="./components/imported/"><br>
-            <div id="soundOptions">
+            <input type="file" id="importSound" accept=".wav, .mp3" value="./components/imported/">bouton import son : non fonctionnel<br>
+            <div id="soundOptions" display="">
                 <input type="button" id="playSound" value="PLAY"> 
                 <input type="button" id="stopSound" value="STOP">
                 Volume<input type="range" min="0.01" max="1" value="0.8" step="0.01" id="volumeSoundSelector">
@@ -104,6 +108,7 @@ class MyLogo extends HTMLElement {
         // Menu
         this.menu = this.shadowRoot.querySelector("#menu");
         this.showMenuButton = this.shadowRoot.querySelector("#showMenu");
+        this.printLogo = this.shadowRoot.querySelector("#printLogo");
         this.opacityMenuSelector = this.shadowRoot.querySelector("#opacityMenuSelector");
         // Text
         this.textEditor = this.shadowRoot.querySelector("#textEditor");
@@ -147,18 +152,21 @@ class MyLogo extends HTMLElement {
             this.policeChoosen.innerHTML = this.police;
         }
         if(this.image) this.logoDiv.style.backgroundImage = "url('components/img/" + this.image + ".jpg')";
+        else this.imageSizeOption.style.display = "none";
         if(this.rotate) this.myLogo.style.transform = 'rotate(' + this.rotate + 'deg)';
         if(this.imageSize) this.logoDiv.style.backgroundSize = "auto " + this.imageSize + "%";
         if(this.animation != "") {
             this.myLogo.classList.add(this.animation);
             this.animated = true;
         } else {
-            this.imageSizeOption.style.visibility = "hidden";
+            // this.imageSizeOption.style.display = "none";
             this.playAnimation.setAttribute("disabled", "");
             this.animated = false;
         }
-        if(this.soundName) this.sound = this.shadowRoot.querySelector("#" + this.soundName);
-        else this.soundOptions.style.visibility = "hidden";
+        // if(this.soundName) {
+        //    this.sound = this.shadowRoot.querySelector("#" + this.soundName);
+        // }
+        this.soundOptions.style.display = "none";
         this.soundPlay = false;
 
         /*************************** OPTIONS DU MENU ***************************/
@@ -172,6 +180,13 @@ class MyLogo extends HTMLElement {
                     this.menu.style.visibility = "visible";
                     this.showMenu = true;
                 }
+            }
+        )
+        // Print logo
+        this.printLogo.addEventListener(
+            "click", (event) => {
+                console.log("toto")
+                print()
             }
         )
         // Opacity Menu
@@ -247,8 +262,8 @@ class MyLogo extends HTMLElement {
             "input", (event) => {
                 this.animation = event.target.value;
                 this.logoDiv.style.backgroundImage = this.animation;
-                if(this.animation == "") this.imageSizeOption.style.visibility = "hidden";
-                else this.imageSizeOption.style.visibility = "visible";
+                if(this.animation == "") this.imageSizeOption.style.display = "none";
+                else this.imageSizeOption.style.display = "inline-flex";
             }
         )
         // Image Size Selector
@@ -265,7 +280,7 @@ class MyLogo extends HTMLElement {
                     this.logoDiv.style.backgroundImage = "url('components/imported/" + filename + "')";
                     this.importedImage.value = filename;
                     this.importedImage.innerHTML = filename;
-                    this.imageSizeOption.style.visibility = "visible";
+                    this.imageSizeOption.style.display = "inline-flex";
                 }
             }
         )
@@ -277,11 +292,11 @@ class MyLogo extends HTMLElement {
                 var filename = event.target.files[0].name;
                 if(filename) {
                     this.selectedSound.src = "components/imported/" + filename;
-                    console.log(this.selectedSound.src)
                     this.soundToImport.innerHTML = filename;
                     this.sound = this.shadowRoot.querySelector("#audio-imported");
-                    console.log(this.sound);
-                    this.soundOptions.style.visibility = "visible";
+                    console.log(this.shadowRoot.querySelector("#audio-imported"));
+                    // console.log(this.sound);
+                    this.soundOptions.style.display = "inline-flex";
                 }
             }
         )
@@ -314,10 +329,10 @@ class MyLogo extends HTMLElement {
                 if(event.target.value != "") {
                     console.log(event.target.value);
                     this.sound = this.shadowRoot.querySelector("#" + event.target.value);
-                    this.soundOptions.style.visibility = "visible";
+                    this.soundOptions.style.display = "inline-flex";
                 } else {
                     this.sound = null;
-                    this.soundOptions.style.visibility = "hidden";
+                    this.soundOptions.style.display = "none";
                 }
             }
         )

@@ -95,7 +95,7 @@ class MyLogo extends HTMLElement {
         this.image = this.getAttribute("image");
         this.imageSize = this.getAttribute("imageSize");
         this.rotate = this.getAttribute("rotate");
-        this.soundName = this.getAttribute("soundName");
+        // this.soundName = this.getAttribute("soundName");
     }
 
     connectedCallback() {
@@ -151,7 +151,7 @@ class MyLogo extends HTMLElement {
             this.policeChoosen.value = this.police;
             this.policeChoosen.innerHTML = this.police;
         }
-        if(this.image) this.logoDiv.style.backgroundImage = "url('components/img/" + this.image + ".jpg')";
+        if(this.image) this.logoDiv.style.backgroundImage = "url('components/img/" + this.image + "')";
         else this.imageSizeOption.style.display = "none";
         if(this.rotate) this.myLogo.style.transform = 'rotate(' + this.rotate + 'deg)';
         if(this.imageSize) this.logoDiv.style.backgroundSize = "auto " + this.imageSize + "%";
